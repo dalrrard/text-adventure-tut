@@ -18,7 +18,7 @@ class MapTile:
         raise NotImplementedError()
 
     def adjacent_moves(self):
-        """Return all move actions for adjacent tiles"""
+        """Returns all move actions for adjacent tiles."""
         moves = []
         if world.tile_exists(self.x + 1, self.y):
             moves.append(actions.MoveEast())
@@ -28,12 +28,12 @@ class MapTile:
             moves.append(actions.MoveNorth())
         if world.tile_exists(self.x, self.y + 1):
             moves.append(actions.MoveSouth())
+        moves.append(actions.ViewInventory())
         return moves
 
     def available_actions(self):
-        """Returns all of the available actions in this room"""
+        """Returns all of the available actions in this room."""
         moves = self.adjacent_moves()
-        moves.append(actions.ViewInventory())
 
         return moves
 
@@ -78,9 +78,9 @@ class EnemyRoom(MapTile):
 
     def available_actions(self):
         if self.enemy.is_alive():
-            return [actions.Flee(tile=self), actions.Attack(enemy=self.enemy), actions.ViewInventory()]
+            return [actions.Flee(tile=self), actions.Attack(enemy=self.enemy)]
         else:
-            return [self.adjacent_moves(), actions.ViewInventory()]
+            return self.adjacent_moves()
 
 
 class EmptyCavePath(MapTile):
