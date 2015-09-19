@@ -1,7 +1,7 @@
+__author__ = 'dalton'
+
 import random
 import items, world
-
-__author__ = 'Phillip Johnson'
 
 
 class Player():
@@ -13,11 +13,6 @@ class Player():
 
     def is_alive(self):
         return self.hp > 0
-
-    def do_action(self, action, **kwargs):
-        action_method = getattr(self, action.method.__name__)
-        if action_method:
-            action_method(**kwargs)
 
     def print_inventory(self):
         for item in self.inventory:
@@ -48,17 +43,20 @@ class Player():
                 if i.damage > max_dmg:
                     max_dmg = i.damage
                     best_weapon = i
-
-        print("You use {} against {}!".format(best_weapon.name, enemy.name))
+        print('You attack {} with {} for {} damage!'.format(enemy.name, best_weapon.name, best_weapon.damage))
         enemy.hp -= best_weapon.damage
         if not enemy.is_alive():
-            print("You killed {}!".format(enemy.name))
+            print('You killed {}!'.format(enemy.name))
         else:
-            print("{} HP is {}.".format(enemy.name, enemy.hp))
+            print('{} HP is {}'.format(enemy.name, enemy.hp))
+
+    def do_action(self, action, **kwargs):
+        action_method = getattr(self, action.method.__name__)
+        if action_method:
+            action_method(**kwargs)
 
     def flee(self, tile):
         """Moves the player randomly to an adjacent tile"""
         available_moves = tile.adjacent_moves()
         r = random.randint(0, len(available_moves) - 1)
         self.do_action(available_moves[r])
-
